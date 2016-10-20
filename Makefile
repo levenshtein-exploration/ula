@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++0x -isystem -Wall -g
+CFLAGS = -std=c++11 -isystem -Wall -g
 
 EXEC_NAME = dula nula wordborhood
 
@@ -20,5 +20,5 @@ wordborhood : $(OBJ_FILES) wordborhood.o
 	$(CC) -o $@ $(OBJ_FILES) wordborhood.o
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) $(CFLAGS) -O3 -o $@ -c $<
 

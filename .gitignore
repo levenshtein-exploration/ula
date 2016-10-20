@@ -1,0 +1,7 @@
+*.o
+*.fsm
+*.fst
+*.dot
+nula
+dula
+Test/

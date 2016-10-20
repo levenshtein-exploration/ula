@@ -60,4 +60,5 @@ public:
 };
 
 void saveAutomaton (Automaton * aut, const string & filename);
+void saveAutomatonAsFst (Automaton * aut, const string & filename);
 void graphVizOutput (Automaton * aut, const string & filename);
