@@ -167,17 +167,11 @@ void saveAutomatonAsFst (Automaton * aut, const string & filename) {
 	ofstream file;
 	file.open (filename);
 
-	file << "Final(2) Bool \"T\" \"F\"" << endl;
-	file << "---" << endl;
+	//file << "Final(2) Bool \"T\" \"F\"" << endl;
+	//file << "---" << endl;
 
-	for (map<int, State *>::iterator it=aut->states.begin() ; it != aut->states.end() ; ++it) {
-		file << 'T' << endl;
-	}
-	
-	file << "---" << endl;
-
-	for (map<int, State *>::iterator it=aut->states.begin() ; it != aut->states.end() ; ++it) {
-		State * st = it->second;
+	for (auto & element : aut->states) {
+		State * st = element.second;
 		
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
 			file << st->getName() << ' ' << st->accessibleStates[idx]->getName() << ' ' << st->transitions[idx] << endl;
