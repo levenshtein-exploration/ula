@@ -129,12 +129,12 @@ void saveAutomaton (Automaton * aut, const string & filename) {
 	for (map<int, State *>::iterator it=aut->states.begin() ; it != aut->states.end() ; ++it) {
 		file << 'T' << endl;
 	}
-	
+
 	file << "---" << endl;
 
 	for (map<int, State *>::iterator it=aut->states.begin() ; it != aut->states.end() ; ++it) {
 		State * st = it->second;
-		
+
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
 			file << st->getName() << ' ' << st->accessibleStates[idx]->getName() << ' ' << st->transitions[idx] << endl;
 		}
@@ -150,7 +150,7 @@ void graphVizOutput (Automaton * aut, const string & filename) {
 
 	for (map<int, State *>::iterator it=aut->states.begin() ; it != aut->states.end() ; ++it) {
 		State * st = it->second;
-		
+
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
 			file << '\t' << st->getName() << " -> " << st->accessibleStates[idx]->getName();
 			file << "[label=\"" << st->transitions[idx] << "\"];" << endl;
@@ -163,20 +163,41 @@ void graphVizOutput (Automaton * aut, const string & filename) {
 };
 
 
-void saveAutomatonAsFst (Automaton * aut, const string & filename) {
+vector<string> generateExplicitTransitions (string implicit) {
+	vector<string> transitions;
+
+	if (implicit == "")
+		return transitions;
+
+	vector<string> tmp = generateExplicitTransitions(implicit.substr(1));
+
+	if (implicit[0] == '0') {
+
+	} else if (implicit[0] == '1') {
+
+	} else {
+
+	}
+
+	return transitions;
+}
+
+void saveAutomatonAsFst (Automaton * aut, const string & filename, int wordSize) {
 	ofstream file;
 	file.open (filename);
 
-	//file << "Final(2) Bool \"T\" \"F\"" << endl;
-	//file << "---" << endl;
+	int size = 1 << wordSize;
+	int nextStates[size];
+	for (int i=0 ; i<size ; i++)
+		nextStates[i] = -1;
 
 	for (auto & element : aut->states) {
 		State * st = element.second;
-		
+
+		// For all the accessible states, we generate
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
-			file << st->getName() << ' ' << st->accessibleStates[idx]->getName() << ' ' << st->transitions[idx] << endl;
+			vector<string> transitions = generateExplicitTransitions(st->transitions[idx]);
 		}
 	}
 	file.close();
 };
-

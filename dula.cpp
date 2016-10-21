@@ -13,7 +13,7 @@ int main (int argc, char *argv[]) {
 	cout << aut->states.size() << " states generated" << endl;
 
 	saveAutomaton (aut, "dula" + std::to_string(k) + ".fsm");
-	saveAutomatonAsFst (aut, "dula" + std::to_string(k) + ".fst");
+	saveAutomatonAsFst (aut, "dula" + std::to_string(k) + ".fst", 2*k+1);
 	//graphVizOutput (aut, "dula" + std::to_string(k) + ".dot");
 
 	delete aut;

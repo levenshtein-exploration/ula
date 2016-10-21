@@ -60,5 +60,5 @@ public:
 };
 
 void saveAutomaton (Automaton * aut, const string & filename);
-void saveAutomatonAsFst (Automaton * aut, const string & filename);
+void saveAutomatonAsFst (Automaton * aut, const string & filename, int wordSize);
 void graphVizOutput (Automaton * aut, const string & filename);
