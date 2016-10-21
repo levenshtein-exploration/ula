@@ -3,6 +3,8 @@
 #include <fstream>
 #include <string>
 #include <math.h>
+#include <stdlib.h>
+
 #include "automaton.h"
 
 
@@ -136,7 +138,8 @@ void saveAutomaton (Automaton * aut, const string & filename) {
 		State * st = it->second;
 
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
-			file << st->getName() << ' ' << st->accessibleStates[idx]->getName() << ' ' << st->transitions[idx] << endl;
+			file << st->getName() << ' ' << st->accessibleStates[idx]->getName() << ' ';
+			cout << st->transitions[idx] << endl;
 		}
 	}
 	file.close();
@@ -166,17 +169,22 @@ void graphVizOutput (Automaton * aut, const string & filename) {
 vector<string> generateExplicitTransitions (string implicit) {
 	vector<string> transitions;
 
-	if (implicit == "")
+	if (implicit == "") {
+		transitions.push_back ("");
 		return transitions;
+	}
 
 	vector<string> tmp = generateExplicitTransitions(implicit.substr(1));
 
-	if (implicit[0] == '0') {
-
-	} else if (implicit[0] == '1') {
-
+	if (implicit[0] == '0' || implicit[0] == '1') {
+		for (string & word : tmp) {
+			transitions.push_back (implicit[0] + word);
+		}
 	} else {
-
+		for (string & word : tmp) {
+			transitions.push_back ('0' + word);
+			transitions.push_back ('1' + word);
+		}
 	}
 
 	return transitions;
@@ -185,6 +193,7 @@ vector<string> generateExplicitTransitions (string implicit) {
 void saveAutomatonAsFst (Automaton * aut, const string & filename, int wordSize) {
 	ofstream file;
 	file.open (filename);
+	char * ptr;
 
 	int size = 1 << wordSize;
 	int nextStates[size];
@@ -196,8 +205,18 @@ void saveAutomatonAsFst (Automaton * aut, const string & filename, int wordSize)
 
 		// For all the accessible states, we generate
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
+			cout << "From: " << st->transitions[idx] << endl;
+			
 			vector<string> transitions = generateExplicitTransitions(st->transitions[idx]);
+			for (string & trans : transitions) {
+				nextStates[strtol(trans.c_str(), NULL, 2)] = stoi(
+					st->accessibleStates[idx]->getName(),
+					nullptr
+				);
+				cout << trans << ' ' << strtol(trans.c_str(), NULL, 2) << endl;
+			}
 		}
+		cout << endl;
 	}
 	file.close();
 };
