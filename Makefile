@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -std=c++11 -isystem -Wall -g
 
-EXEC_NAME = dula nula wordborhood
+EXEC_NAME = dula nula
 
 OBJ_FILES = levenshtein.o automaton.o
 

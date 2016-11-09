@@ -4,6 +4,7 @@
 #include <string>
 #include <math.h>
 #include <stdlib.h>
+#include <bitset>
 
 #include "automaton.h"
 
@@ -139,7 +140,7 @@ void saveAutomaton (Automaton * aut, const string & filename) {
 
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
 			file << st->getName() << ' ' << st->accessibleStates[idx]->getName() << ' ';
-			cout << st->transitions[idx] << endl;
+			//cout << st->transitions[idx] << endl;
 		}
 	}
 	file.close();
@@ -195,28 +196,104 @@ void saveAutomatonAsFst (Automaton * aut, const string & filename, int wordSize)
 	file.open (filename);
 	char * ptr;
 
+	int wellState = aut->states.size();
 	int size = 1 << wordSize;
 	int nextStates[size];
-	for (int i=0 ; i<size ; i++)
-		nextStates[i] = -1;
 
+	// Transitions in dula
 	for (auto & element : aut->states) {
+		for (int i=0 ; i<size ; i++)
+			nextStates[i] = wellState;
+
 		State * st = element.second;
 
-		// For all the accessible states, we generate
+		// Filling all the transition for the current state
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
-			cout << "From: " << st->transitions[idx] << endl;
-			
 			vector<string> transitions = generateExplicitTransitions(st->transitions[idx]);
 			for (string & trans : transitions) {
 				nextStates[strtol(trans.c_str(), NULL, 2)] = stoi(
 					st->accessibleStates[idx]->getName(),
 					nullptr
 				);
-				cout << trans << ' ' << strtol(trans.c_str(), NULL, 2) << endl;
 			}
 		}
-		cout << endl;
+
+		// Saving the transitions for the current state
+		for (int i=0 ; i<size ; i++) {
+			file << st->getName() << " " << nextStates[i] << " ";
+			bitset<32> binVal(i);
+			for (int j=wordSize-1 ; j>=0 ; j--)
+				file << binVal[j];
+
+			file << " <epsilon> 0" << endl;
+		}
 	}
+
+	// Transitions for the well state.
+	for (int i=0 ; i<size ; i++) {
+		file << wellState << " " << wellState << " ";
+		bitset<32> binVal(i);
+		for (int j=wordSize-1 ; j>=0 ; j--)
+			file << binVal[j];
+
+		file << " <epsilon> 0" << endl;
+	}
+
+	// Declaration of final states
+	for (auto & element : aut->states) {
+		file << element.second->getName() << endl;
+	}
+
 	file.close();
+
+
+	// Creation of input symbols
+	ofstream iSymb;
+	iSymb.open (filename + ".iSym");
+
+	iSymb << "<epsilon> 0" << endl;
+	for (int i=0 ; i<size ; i++) {
+		bitset<32> binVal(i);
+		for (int j=wordSize-1 ; j>=0 ; j--)
+			iSymb << binVal[j];
+
+		iSymb << " " << (i+1) << endl;
+	}
+	iSymb.close();
+
+
+	// Creation of the output symbols
+	ofstream oSymb;
+	oSymb.open (filename + ".oSym");
+	oSymb << "<epsilon> 0" << endl;
+	oSymb.close();
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Bottom
