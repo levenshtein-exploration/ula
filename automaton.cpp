@@ -140,6 +140,7 @@ void saveAutomaton (Automaton * aut, const string & filename) {
 
 		for (int idx=0 ; idx<st->accessibleStates.size() ; idx++) {
 			file << st->getName() << ' ' << st->accessibleStates[idx]->getName() << ' ';
+			file << "\"" << st->transitions[idx] << "\"" << endl;
 			//cout << st->transitions[idx] << endl;
 		}
 	}
