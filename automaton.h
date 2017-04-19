@@ -5,11 +5,16 @@
 
 using namespace std;
 
+#ifndef AUT_H
+#define AUT_H
+
 class State {
 public:
 	vector<State *> accessibleStates;
 	vector<string> transitions;
 	map<string, int> transPos;
+	int _idx;
+	bool final;
 
 	State();
 	~State();
@@ -20,8 +25,8 @@ public:
 	void modifyTransitionTo (State * state, const string & transition);
 	State * getNext (string transition);
 
-	virtual string toString() {};
-	virtual string getName() {};
+	virtual string toString() {return "";};
+	virtual string getName() {return "";};
 };
 
 class NulaState: public State {
@@ -50,6 +55,7 @@ public:
 	int statePosition (DulaState * state);
 	string toString();
 	string getName();
+	State * getNext (string transition);
 };
 
 class Automaton {
@@ -62,3 +68,6 @@ public:
 void saveAutomaton (Automaton * aut, const string & filename);
 void saveAutomatonAsFst (Automaton * aut, const string & filename, int wordSize);
 void graphVizOutput (Automaton * aut, const string & filename);
+
+
+#endif
