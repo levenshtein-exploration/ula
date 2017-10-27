@@ -30,7 +30,7 @@ int main (int argc, char *argv[]) {
 	for (int idx=1 ; idx<argc ; idx++) {
 		string arg = string(argv[idx]);
 
-		if (!strcmp(argv[idx], "-k")) {
+		if (arg == "-k") {
 			idx += 1;
 			k = atoi(argv[idx]);
 
@@ -38,9 +38,9 @@ int main (int argc, char *argv[]) {
 				cerr << "A Levenshtein distance can't be negative" << endl;
 				exit(1);
 			}
-		} else if (!strcmp(argv[idx], "-fsm")) {
+		} else if (arg == "-fsm") {
 			fsm = true;
-		} else if (!strcmp(argv[idx], "-dot")) {
+		} else if (arg == "-dot") {
 			dot = true;
 		} else if (arg == "-h") {
 			cout << help();
