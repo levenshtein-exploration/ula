@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11 -isystem -Wall -g
+CFLAGS = -std=c++11 -isystem -Wall -O3
 
 EXEC_NAME = dula nula
 
