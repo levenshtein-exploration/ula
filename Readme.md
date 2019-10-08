@@ -1,7 +1,7 @@
 # Universal Levenshtein Automaton (ula)
 
 This piece of software can be use to generate both deterministic and nondeterministic Universal Levenshtein Automata.
-The technic used to generate the deterministic one is presented in the Hélène Touzet research article ("On the Levenshtein Automaton and the Size of the Neighbourhood of a Word")[https://link.springer.com/chapter/10.1007/978-3-319-30000-9_16], LATA 2016.
+The technic used to generate the deterministic one is presented in ("On the Levenshtein Automaton and the Size of the Neighbourhood of a Word")[https://link.springer.com/chapter/10.1007/978-3-319-30000-9_16], H. Touzet, LATA 2016.
 
 ## Usage
 
